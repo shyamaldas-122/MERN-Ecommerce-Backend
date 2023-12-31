@@ -23,7 +23,7 @@ const { User } = require('./model/User');
 const { isAuth, sanitizeUser, cookieExtractor } = require('./services/common');
 const path = require('path');
 
-console.log(process.env)
+// console.log(process.env)
 
 // Webhook
 
@@ -71,7 +71,7 @@ opts.secretOrKey = process.env.JWT_SECRET_KEY; // TODO: should not be in code;
 
 //middlewares
 
-server.use(express.static(path.resolve(__dirname,'build')))
+server.use(express.static(path.resolve(__dirname,'dist')))
 server.use(cookieParser());
 server.use(
   session({
