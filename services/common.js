@@ -1,4 +1,16 @@
 const passport = require('passport');
+const nodemailer = require('nodemailer');
+
+let transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: 'programming582@gmail.com', // gmail
+    pass: process.env.MAIL_PASSWORD, // pass
+  },
+});
+
 
 exports.isAuth = (req, res, done) => {
   return passport.authenticate('jwt');
@@ -14,7 +26,18 @@ exports.cookieExtractor = function (req) {
     token = req.cookies['jwt'];
   }
   //TODO : this is temporary token for testing without cookie
-  // token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1OGVkNGQ0M2E5OGViNWRiYWEwZWU1MiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzAzODU5NDEyfQ.eiKsVDO0xOSXevEn075CA3De1Tc3KPKrKlRbd2m1OyM"
-//   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1OGVkYjI1NGEzZGE2MTEyY2IyNWE5ZiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzAzODYxMDI5fQ.71U3z873bvFGGFz5b8TKOrjYWjtDPdCfwMN3w2xuz0k"
+  // token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWJmNzViOWI3OWFkMTNiMTUxNWQ0MCIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjgzNzQ4ODY3fQ.DyMEFgayuvUGrzvPHIxmCJWi4xstvp4hR-dRSBjRNhE"
   return token;
 };
+
+
+exports.sendMail = async function ({to, subject, text, html}){
+    let info = await transporter.sendMail({
+        from: '"E-commerce" <programming582@gmail.com>', // sender address
+        to,
+        subject,
+        text,
+        html
+      });
+    return info;  
+}
